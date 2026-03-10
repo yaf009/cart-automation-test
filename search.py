@@ -153,25 +153,31 @@ def verify_cart_badge(wait: WebDriverWait) -> None:
         fail(f"Cart badge shows unexpected value: '{badge_text}'")
 
 
-def verify_product_in_cart(driver: webdriver.Chrome, wait: WebDriverWait, product_name: str) -> None:
-    """Verify 2: Navigate to /cart and confirm product name appears in the cart drawer."""
-    log(7, f"Verify 2 — Open cart and confirm '{product_name}' is listed")
+def verify_product_in_cart(wait: WebDriverWait, product_name: str) -> None:
+    """Verify 2: Click the cart icon to open the drawer, confirm product name is listed."""
+    log(8, f"Verify 2 — Open cart drawer and confirm '{product_name}' is listed")
 
-    driver.get(f"{BASE_URL}/cart")
+    # Click the cart icon in the header to open the drawer
+    cart_icon = wait.until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='/cart']"))
+    )
+    cart_icon.click()
 
+    # Wait for the drawer to open
     drawer = wait.until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, "[role='dialog']"))
     )
+    ok("Cart drawer opened")
 
     if product_name in drawer.text:
-        ok(f"'{product_name}' found in cart")
+        ok(f"'{product_name}' found in cart drawer")
     else:
-        fail(f"'{product_name}' NOT found — cart contents:\n{drawer.text[:300]}")
+        fail(f"'{product_name}' NOT found — drawer contents:\n{drawer.text[:300]}")
 
 
 def close_cart(wait: WebDriverWait) -> None:
-    """Verify 3: Close the cart drawer and confirm it disappears."""
-    log(8, "Verify 3 — Close cart drawer")
+    """Verify 3: Close the cart drawer via the X button and confirm it disappears."""
+    log(9, "Verify 3 — Close cart drawer")
 
     close_btn = wait.until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Close']"))
@@ -219,8 +225,8 @@ def run_test() -> bool:
         add_to_cart(wait)                                      # Step 5
         dismiss_cart_dialog(wait)                              # Step 6 — close auto-opened dialog
         verify_cart_badge(wait)                                # Verify 1: badge shows 1
-        verify_product_in_cart(driver, wait, PRODUCT_NAME)    # Verify 2: open cart, check product
-        close_cart(wait)                                       # Verify 3: close cart drawer
+        verify_product_in_cart(wait, PRODUCT_NAME)            # Verify 2: open drawer, check product
+        close_cart(wait)                                      # Verify 3: close cart drawer
 
         print("\n" + "=" * 60)
         print("TEST PASSED ✓")
