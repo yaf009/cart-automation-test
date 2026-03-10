@@ -1,0 +1,25 @@
+============================================================
+TEST REPORT — Search product and add to cart
+Run at : 2025-01-15 14:32:07
+Result : PASSED
+Duration: 18.4s
+============================================================
+  [✓] Step 1: Login
+        → Authenticated and redirected away from /password
+  [✓] Step 2: Go to home page
+        → Loaded https://adnabu-store-assignment1.myshopify.com
+  [✓] Step 3: Search for 'snowboard'
+        → Opened /search?q=snowboard
+  [✓] Step 4: Click product 'The Videographer Snowboard'
+        → Product page loaded with Add-to-cart button
+  [✓] Step 5: Add to cart
+        → Clicked button[name='add']
+  [✓] Step 6: Dismiss cart dialog
+        → Clicked X — dialog no longer visible
+  [✓] Step 7: Verify cart badge = 1
+        → Badge text: '1'
+  [✓] Step 8: Verify 'The Videographer Snowboard' in cart
+        → Product name found in cart drawer
+  [✓] Step 9: Close cart drawer
+        → Drawer no longer visible
+============================================================
